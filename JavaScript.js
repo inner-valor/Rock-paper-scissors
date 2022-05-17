@@ -1,11 +1,9 @@
-
-const min = 1;
-const max = 3;
+let results = document.querySelector('#results');
 
 
 // create a random number.
 function randomNumber() {
-   return Math.floor(Math.random() * (max - min + 1) + min);
+   return Math.floor(Math.random() * (3 - 1 + 1) + 1);
     
 }
 
@@ -27,59 +25,82 @@ function computerPlay() {
 // records the wins, loss, and rounds.
 let win = 0;
 let loss = 0;
-let r = 0;
+let roundPlayed = 0;
+const endResult = document.querySelector('#endresult');
+const TOTALROUNDS = 5;
+
+
+
+
+
+
 
 // game mechanics.
+
 function playRound(playerSelection, computerSelection) {
+    roundPlayed++
+    condition() // condition will play when roundplayed = TOTALROUNDS.
 
-    if (playerSelection.toLowerCase() == "rock" && computerSelection === "scissor"|| 
-        playerSelection.toLowerCase() == "paper" && computerSelection === "rock"||
-        (playerSelection.toLowerCase() == "scissor" || playerSelection.toLowerCase() == "scissors") && computerSelection === "paper") 
-    {
-        return win++, console.log(`you Won round ${r + 1}! ${playerSelection} beats ${computerSelection}`);
+    if (roundPlayed <= TOTALROUNDS) { // disable the buttons if false
+
+        if (playerSelection.toLowerCase() == "rock"    && computerSelection === "scissor"|| 
+            playerSelection.toLowerCase() == "paper"   && computerSelection === "rock"   ||
+            playerSelection.toLowerCase() == "scissor" && computerSelection === "paper") 
+        {
+
+            win++
+            document.querySelector('#wins').textContent = win;
+            return results.textContent = `you Won round ${roundPlayed}! ${playerSelection} beats ${computerSelection}`;
         
         
-    } else if (playerSelection.toLowerCase() == computerSelection || playerSelection.toLowerCase() == "scissors" && computerSelection == "scissor") {
-        return console.log(`no-one wins round ${r + 1}`);
+        } else if (playerSelection.toLowerCase() == computerSelection) {
 
-    } else {
-        return loss++, console.log(`you loss round ${r + 1}! ${computerSelection} beats ${playerSelection}`);
+            return results.textContent =`no one wins round ${roundPlayed}!`;
+
+        } else {
+
+            loss++
+            document.querySelector('#losses').textContent = loss;
+            return results.textContent = `you loss round ${roundPlayed}! ${computerSelection} beats ${playerSelection}`;
         
     }
-    
+    }
+
 }
 // win/loss conditions
-function condition(r) {
-    if (win > loss && r === 5) {
-        return console.log("WINNER!!");
 
-    } else if (win < loss && r === 5) {
-        return console.log("LOSER!!");
-        
-    } else if (win == loss && r === 5) {
-        return console.log("Tie");
-    }
-}
-let playerSelection;
-
-// game rounds
-function game() {
+function condition() {
     
-    for (let i = 0; i < 5; i++) {
-        playerSelection = prompt("rock paper or scissors");
-
-        playRound(playerSelection, computerPlay())
+    if (win > loss && roundPlayed === TOTALROUNDS) {
         
-        r++;
+       return endResult.textContent = "WINNER!!";
+
+    } else if (win < loss && roundPlayed === TOTALROUNDS) {
+       return endResult.textContent = "LOSER!!";
+        
+    } else if (win == loss && roundPlayed === TOTALROUNDS) {
+       return endResult.textContent = "Tie";
     }
-
-    condition(r)
-// reset game score.
-    r = 0;
-    win = 0;
-    loss = 0;
-
-
 }
+
+// player selection
+const rock = document.querySelector('#rock');
+const paper = document.querySelector('#paper');
+const scissor = document.querySelector('#scissor');
+
+rock.addEventListener('click', () => {
+    playRound('rock', computerPlay());
+});
+paper.addEventListener('click', () => {
+    playRound('paper', computerPlay());
+});
+scissor.addEventListener('click', () => {
+    playRound('scissor', computerPlay());
+});
+    
+
+
+
+
 
 
